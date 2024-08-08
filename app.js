@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose')
 
 const app = express();
 const adminRoutes = require("./routes/admin");
@@ -20,4 +21,8 @@ app.get("/user", (req, res, next) => {
 // any endpoint starting with admin will enter this route
 app.use("/admin", adminRoutes);
 
-app.listen(8080);
+mongoose.connect('mongodb+srv://davidmide07:MCxxoXAGCyATrXW3@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster').then(
+  console.log('connected to databasee'),
+  app.listen(8080)
+)
+
