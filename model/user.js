@@ -9,16 +9,20 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: String,
+    required: true,
   },
   password: {
     type: String,
-    required: String,
+    required: true,
   },
-//   for subscription
+  //   for subscription
   status: {
     type: String,
-    required: String,
+    default: "free",
+  },
+  role: {
+    type: String,
+    default: "user",
   },
 });
 
