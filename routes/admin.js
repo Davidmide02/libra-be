@@ -1,7 +1,7 @@
 const express = require("express");
 const adminController = require("../controller/adminController");
 const router = express.Router();
-const { body, check } = require("express-validator/check");
+const { body, check } = require("express-validator");
 
 // /admin/create
 router.post(
