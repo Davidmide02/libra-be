@@ -30,8 +30,6 @@ exports.createMaterial = async (req, res, next) => {
     count,
   });
   await newMaterial.save();
-  // console.log(newMaterial);
-
   res.status(200).json({
     message: "Material added successfully",
     newMaterial,

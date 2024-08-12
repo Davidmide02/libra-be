@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const app = express();
 const adminRoutes = require("./routes/admin");
+const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.json());
 
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// test run user
 app.get("/user", (req, res, next) => {
   res.status(201).json({ come: "again" });
 });
@@ -21,8 +23,10 @@ app.get("/user", (req, res, next) => {
 // any endpoint starting with admin will enter this route
 app.use("/admin", adminRoutes);
 
-mongoose.connect('mongodb+srv://davidmide07:MCxxoXAGCyATrXW3@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster').then(
-  console.log('connected to databasee'),
-  app.listen(8080)
-)
+app.use("/auth", authRoutes);
 
+mongoose
+  .connect(
+    "mongodb+srv://davidmide07:MCxxoXAGCyATrXW3@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster"
+  )
+  .then(console.log("connected to databasee"), app.listen(8080));
