@@ -5,12 +5,10 @@ const userDb = require("../model/user");
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // const error = new Error('Validation failed');
-    // error.data =errors.array();
-    // throw error;
-    return res.json({
-      message: "Validation Falied",
-    });
+    const error = new Error("Validation failed");
+    error.data = errors.array();
+    error.statusCode = 402;
+    throw error;
   }
 
   const username = req.body.username;
@@ -19,11 +17,12 @@ exports.signup = (req, res, next) => {
   bcrypt
     .hash(password, 12)
     .then((hashedPw) => {
-      const userDb = new userDb({
+      const user = new userDb({
         email,
         password: hashedPw,
         username,
       });
+      return res.json({ message: "You've register succefully", user });
     })
     .catch((err) => {
       if (!err.statusCode) {

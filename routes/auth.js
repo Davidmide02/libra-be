@@ -6,7 +6,7 @@ const { body } = require("express-validator");
 
 // auth/signup ....endpoint
 router.post(
-  "signup",
+  "/signup",
   [
     body("username").notEmpty().trim().withMessage("Add username"),
     body("email")
@@ -23,7 +23,7 @@ router.post(
         });
       }),
     body("password").notEmpty().trim().withMessage("Add state"),
-    body("status").notEmpty().trim().withMessage("Add category"),
+    // body("status").notEmpty().trim().withMessage("Add category"),
     // body("count").notEmpty().isNumeric().withMessage("Add number"),
   ],
   authController.signup

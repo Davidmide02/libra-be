@@ -13,7 +13,7 @@ exports.createMaterial = async (req, res, next) => {
   }
   const title = req.body.title;
   const author = req.body.author;
-  const category = req.body.category; 
+  const category = req.body.category;
   const count = req.body.count;
   // const isbn = req.body.isnb;
   // const bookState = req.body.bookState;
@@ -37,12 +37,15 @@ exports.createMaterial = async (req, res, next) => {
 };
 
 exports.getAllMaterial = async (req, res, next) => {
-  const allMaterials = await materialDb.find();
-
-  res.json({
-    message: "materails fetched",
-    allMaterials,
-  });
+  try {
+    const allMaterials = await materialDb.find();
+    res.json({
+      message: "materails fetched",
+      allMaterials,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.editMaterial = async (req, res, next) => {
