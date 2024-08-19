@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 app.use(bodyParser.json());
 
@@ -15,19 +16,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// test run user
-app.get("/user", (req, res, next) => {
-  res.status(201).json({ come: "again" });
-});
 
-// any endpoint starting with admin will enter this route
 app.use("/admin", adminRoutes);
-
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 // error middleware
 app.use((error, req, res, next) => {
-
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;

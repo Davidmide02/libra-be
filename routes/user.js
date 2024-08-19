@@ -1,3 +1,21 @@
+const express = require("express");
+const userController = require("../controller/userController");
+const router = express.Router();
+const userDb = require("../model/user");
+const { body } = require("express-validator");
+
+// get all material
+// user/material
+router.get("/material", userController.getAllMaterial);
+
+// user request for a material
+// endpoint
+// user/request/:materialId
+router.post("/request/:materialId", userController.getAllMaterial);
+
+// rate/review
+// create review model
+
 // register
 // login
 // see email for log in

@@ -2,10 +2,6 @@ const { body, validationResult } = require("express-validator");
 const materialDb = require("../model/material");
 
 exports.createMaterial = async (req, res, next) => {
-  // check for authentication and authorization
-  // validate req
-  // materials properties -title,author,category,trackbook/state(available||reserved||), nos. available, image
-
   const result = validationResult(req);
 
   if (!result.isEmpty()) {
@@ -66,11 +62,17 @@ exports.editMaterial = async (req, res, next) => {
   // const isbn = req.body.isnb;
 
   // update the result
-  materialToEdit.title = title;
-  materialToEdit.author = author;
-  materialToEdit.category = category;
-  materialToEdit.count = count;
-  materialToEdit.save();
+  await materialToEdit({
+    title,
+    author,
+    category,
+    count,
+  });
+  // materialToEdit.title = title;
+  // materialToEdit.author = author;
+  // materialToEdit.category = category;
+  // materialToEdit.count = count;
+  await materialToEdit.save();
 
   // and save to the database
   return res.json({
