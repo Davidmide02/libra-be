@@ -11,10 +11,16 @@ router.get("/material", userController.getAllMaterial);
 // user request for a material
 // endpoint
 // user/request/:materialId
-router.post("/request/:materialId", userController.getAllMaterial);
+router.post("/request/:materialId", userController.requestMaterial);
 
 // rate/review
 // create review model
+// matetial id
+// user id
+// rate and comment
+// endpoint
+// user/review/:materialId
+router.post("/review/:materialId", userController.reviewMaterial);
 
 // register
 // login

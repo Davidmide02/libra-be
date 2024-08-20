@@ -12,18 +12,30 @@ const materialSchema = new mongoose.Schema(
       require: true,
     },
     count: {
-        type: Number,
-        require: true,
+      type: Number,
+      require: true,
     },
     category: {
-        type: String,
-        require: true,
-    },
-    bookState: {
       type: String,
       require: true,
-      default: "avilable",
     },
+    isavailabe: {
+      type: Boolean,
+      require: true,
+      default: true,
+    },
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    requests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Request",
+      },
+    ],
   },
   { timestamps: true }
 );
