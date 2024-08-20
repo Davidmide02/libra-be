@@ -16,10 +16,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use("/admin", adminRoutes);
-app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/auth", authRoutes);
 
 // error middleware
 app.use((error, req, res, next) => {

@@ -3,7 +3,6 @@ const userController = require("../controller/userController");
 const router = express.Router();
 const userDb = require("../model/user");
 const { body } = require("express-validator");
-
 // get all material
 // user/material
 router.get("/material", userController.getAllMaterial);
@@ -30,3 +29,4 @@ router.post("/review/:materialId", userController.reviewMaterial);
 // subscription state
 //  free subscription access to limited material 2. limited borrows
 // paid per month or week
+module.exports = router;
