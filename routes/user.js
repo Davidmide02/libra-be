@@ -14,7 +14,7 @@ router.post("/request/:materialId", userController.requestMaterial);
 
 // rate/review
 // create review model
-// matetial id
+// matetial id 
 // user id
 // rate and comment
 // endpoint

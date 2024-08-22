@@ -27,15 +27,21 @@ exports.requestMaterial = async (req, res, next) => {
     newRequest.materials.push(materialId);
     newRequest.users.push(userId);
     await newRequest.save();
-    const material = materialDb.findById(materialId);
+    console.log("request created", newRequest);
+
+    const material = await materialDb.findById(materialId);
+    console.log("materail", material);
+
     if (!material) {
       const error = new Error("material not found");
       error.statusCode = 500;
-      throw error;
+      return next(error);
     }
-    material.requests.push(newRequest._id);
+    console.log("req id", newRequest._id.toString());
+
+    material.requests.push(newRequest._id.toString());
     await material.save();
-    res.json({
+    return res.json({
       message: "Material request successful",
       newRequest,
     });
@@ -78,3 +84,6 @@ exports.reviewMaterial = async (req, res, next) => {
     next(error);
   }
 };
+
+
+// Error: Can't set headers after they are sent to the client

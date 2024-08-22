@@ -26,13 +26,13 @@ const materialSchema = new Schema(
     },
     reviews: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Review",
       },
     ],
     requests: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Request",
       },
     ],

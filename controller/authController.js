@@ -9,7 +9,7 @@ exports.signup = async (req, res, next) => {
     const error = new Error("Validation failed");
     error.data = errors.array();
     error.statusCode = 402;
-    throw error;
+    return next(error);
   }
 
   const username = req.body.username;
@@ -33,6 +33,13 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed");
+    error.data = errors.array();
+    error.statusCode = 402;
+    return next(error);
+  }
   const email = req.body.email;
   const password = req.body.password;
   try {
@@ -40,24 +47,25 @@ exports.login = async (req, res, next) => {
     if (!user) {
       const error = new Error("User not found");
       error.statusCode = 404;
-      throw error;
+      return next(error);
     }
     const isEqaul = await bcrypt.compare(password, user.password);
     if (!isEqaul) {
       const error = new Error("Wrong password");
       error.statusCode = 401;
-      throw error;
+      return next(error);
     }
 
     const token = jwt.sign(
       { email: user.email, userId: user._id.toString() },
       "longsupersecret",
-      { expairIn: "1h" }
+      { expiresIn: "1h" }
     );
-    res.status(200).json({
-      message: "Login in successdully",
-      token,
+    return res.status(200).json({
+      message: "Login successfully",
+      email,
       userId: user._id.toString(),
+      token,
     });
   } catch (error) {
     if (!error.statusCode) {
