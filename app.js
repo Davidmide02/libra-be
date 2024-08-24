@@ -32,4 +32,9 @@ mongoose
   .connect(
     "mongodb+srv://davidmide07:MCxxoXAGCyATrXW3@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster"
   )
-  .then(console.log("connected to databasee"), app.listen(8080));
+  .then(console.log("connected to databasee"), app.listen(8080))
+  .catch((err) => {
+    console.log("Cannot connect to database");
+    console.log(err);
+
+  });

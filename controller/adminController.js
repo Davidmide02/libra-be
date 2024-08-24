@@ -1,5 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const materialDb = require("../model/material");
+const { Error } = require("mongoose");
 
 exports.createMaterial = async (req, res, next) => {
   const result = validationResult(req);
@@ -11,32 +12,29 @@ exports.createMaterial = async (req, res, next) => {
   const author = req.body.author;
   const category = req.body.category;
   const count = req.body.count;
-  // const isbn = req.body.isnb;
-  // const bookState = req.body.bookState;
 
-  // reviews from users
-  //   add available as defualt value and make it optional in database
-  //   available||reserved||checkout||new
-
-  // save to database
-  const newMaterial = new materialDb({
-    title,
-    author,
-    category,
-    count,
-  });
-  await newMaterial.save();
-  res.status(200).json({
-    message: "Material added successfully",
-    newMaterial,
-  });
+  try {
+    const newMaterial = new materialDb({
+      title,
+      author,
+      category,
+      count,
+    });
+    await newMaterial.save();
+    res.status(200).json({
+      message: "Material added successfully",
+      newMaterial,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.getAllMaterial = async (req, res, next) => {
   try {
     const allMaterials = await materialDb.find();
     res.json({
-      message: "materails fetched",
+      message: "materials fetched",
       allMaterials,
     });
   } catch (error) {
@@ -45,62 +43,59 @@ exports.getAllMaterial = async (req, res, next) => {
 };
 
 exports.editMaterial = async (req, res, next) => {
-  // get the id of the materials to be editted
   const { id } = req.params;
-  // check if the materials exist in the Db
-  const materialToEdit = await materialDb.findById(id);
-  // get the updates sent from res
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    // console.log(result);
     return res.json({ errors: result.array() });
   }
+
   const title = req.body.title;
   const author = req.body.author;
   const category = req.body.category;
   const count = req.body.count;
-  // const isbn = req.body.isnb;
-
-  // update the result
-  await materialToEdit({
-    title,
-    author,
-    category,
-    count,
-  });
-  // materialToEdit.title = title;
-  // materialToEdit.author = author;
-  // materialToEdit.category = category;
-  // materialToEdit.count = count;
-  await materialToEdit.save();
-
-  // and save to the database
-  return res.json({
-    message: "editted succeffully",
-    id,
-    materialToEdit,
-  });
+  try {
+    const materialToEdit = await materialDb.findById(id);
+    if (!materialToEdit) {
+      const error = new Error("Material not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+    await materialToEdit({
+      title,
+      author,
+      category,
+      count,
+    });
+    await materialToEdit.save();
+    return res.json({
+      message: "editted succeffully",
+      id,
+      materialToEdit,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.deleteMaterial = async (req, res, next) => {
   const { id } = req.params;
-  // check if the materials exist in the Db
-  const materialToDeleted = await materialDb.findByIdAndDelete(id);
-  console.log(materialToDeleted);
 
-  if (materialToDeleted === null) {
+  try {
+    const materialToDeleted = await materialDb.findByIdAndDelete(id);
+    if (!materialToDeleted) {
+      const error = new Error("Can't delete material");
+      error.statusCode = 404;
+      return next(error);
+    }
+
     return res.json({
-      message: "Can't delete materail",
+      message: "Material deleted successfully",
       id,
+      materialToDeleted,
     });
+  } catch (error) {
+    next(error);
   }
-  // check if the materials exist in the Db
-  // delete the material
-  return res.json({
-    message: "Material deleted succeffully",
-    id,
-    materialToDeleted,
-  });
 };
 // 66b4dd9560194678ddab5cdf
 // 66b4d9da6bdcf4ad85c8eb30

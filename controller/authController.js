@@ -23,7 +23,9 @@ exports.signup = async (req, res, next) => {
       username,
     });
     await user.save();
-    return res.json({ message: "You've register succefully", user });
+    return res
+      .status(200)
+      .json({ message: "You've register succefully", user });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -37,7 +39,7 @@ exports.login = async (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed");
     error.data = errors.array();
-    error.statusCode = 402;
+    error.statusCode = 422;
     return next(error);
   }
   const email = req.body.email;
@@ -52,7 +54,7 @@ exports.login = async (req, res, next) => {
     const isEqaul = await bcrypt.compare(password, user.password);
     if (!isEqaul) {
       const error = new Error("Wrong password");
-      error.statusCode = 401;
+      error.statusCode = 422;
       return next(error);
     }
 

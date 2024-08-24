@@ -5,7 +5,7 @@ const requestSchema = new Schema(
   {
     materials: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Material",
       },
     ],

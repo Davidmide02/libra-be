@@ -17,8 +17,12 @@ exports.getAllMaterial = async (req, res, next) => {
 exports.requestMaterial = async (req, res, next) => {
   // check if the book is available
   // check the count
-  const { materialId } = req.param;
+  // "66b4da21c880083f7467974b"
+  const { materialId } = req.params;
   const userId = req.body.userId;
+
+  console.log("userId:", userId);
+  console.log("materialID:", materialId);
 
   try {
     const newRequest = new requestDb({
@@ -27,19 +31,15 @@ exports.requestMaterial = async (req, res, next) => {
     newRequest.materials.push(materialId);
     newRequest.users.push(userId);
     await newRequest.save();
-    console.log("request created", newRequest);
-
     const material = await materialDb.findById(materialId);
-    console.log("materail", material);
 
     if (!material) {
       const error = new Error("material not found");
-      error.statusCode = 500;
+      error.statusCode = 404;
       return next(error);
     }
-    console.log("req id", newRequest._id.toString());
 
-    material.requests.push(newRequest._id.toString());
+    material.requests.push(newRequest._id);
     await material.save();
     return res.json({
       message: "Material request successful",
@@ -53,7 +53,7 @@ exports.requestMaterial = async (req, res, next) => {
 exports.reviewMaterial = async (req, res, next) => {
   // check if the book is available
   // check the count
-  const { materialId } = req.param;
+  const { materialId } = req.params;
   const userId = req.body.userId;
   const rating = req.body.rating;
   const comment = req.body.comment;
@@ -65,17 +65,16 @@ exports.reviewMaterial = async (req, res, next) => {
       comment,
       user: userId,
     });
-
     await createReview.save();
-    const material = materialDb.findById(materialId);
+    const material = await materialDb.findById(materialId);
     if (!material) {
       const error = new Error("material not found");
-      error.statusCode = 500;
-      throw error;
+      error.statusCode = 404;
+      return next(error);
     }
     material.reviews.push(createReview._id);
     await material.save();
-    // add the new review into the material model
+
     res.json({
       message: "Material reviewed successfully",
       createReview,
@@ -85,5 +84,5 @@ exports.reviewMaterial = async (req, res, next) => {
   }
 };
 
-
 // Error: Can't set headers after they are sent to the client
+// request id "66ca386a583d34eda00f4acc"
