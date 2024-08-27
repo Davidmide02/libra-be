@@ -6,8 +6,9 @@ const app = express();
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const db_username = process.env.DB_NAME;
+const db_username = process.env.DB_USERNAME;
 const db_password = process.env.DB_PASSWORD;
+
 
 app.use(bodyParser.json());
 
@@ -32,10 +33,12 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    `mongodb+srv://${db_username}:${db_username}@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster`
+    `mongodb+srv://${db_username}:${db_password}@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster`
   )
-  .then(console.log("connected to databasee"), app.listen(8080))
+  .then(
+    console.log("connected to databasee"),
+    app.listen(8080)
+  )
   .catch((err) => {
     console.log("Cannot connect to database");
-    console.log(err);
   });
