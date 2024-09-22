@@ -23,14 +23,18 @@ exports.signup = async (req, res, next) => {
       username,
     });
     await user.save();
-    return res
-      .status(200)
-      .json({
-        message: "You've register succefully",
-        email,
-        username,
-        role: user.role,
-      });
+    const token = jwt.sign(
+      { email: user.email, userId: user._id.toString() },
+      "longsupersecret",
+      { expiresIn: "1h" }
+    );
+    return res.status(200).json({
+      message: "You've register succefully",
+      email,
+      username,
+      role: user.role,
+      token,
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
