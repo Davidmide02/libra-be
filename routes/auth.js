@@ -32,9 +32,8 @@ router.post(
           next(error);
         }
       }),
-    body("password").notEmpty().trim().withMessage("Add state"),
-    // body("status").notEmpty().trim().withMessage("Add category"),
-    // body("count").notEmpty().isNumeric().withMessage("Add number"),
+    body("password").notEmpty().withMessage("Add password").trim(),
+    
   ],
   authController.signup
 );

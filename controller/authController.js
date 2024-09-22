@@ -25,7 +25,12 @@ exports.signup = async (req, res, next) => {
     await user.save();
     return res
       .status(200)
-      .json({ message: "You've register succefully", user });
+      .json({
+        message: "You've register succefully",
+        email,
+        username,
+        role: user.role,
+      });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
