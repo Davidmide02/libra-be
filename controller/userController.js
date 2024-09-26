@@ -14,6 +14,23 @@ exports.getAllMaterial = async (req, res, next) => {
   }
 };
 
+exports.singleMaterial = async (req, res, next) => {
+  const { materialId } = req.params;
+
+  try {
+    const material = await materialDb.findById(materialId);
+
+    if (!material) {
+      const error = new Error("material not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+    return res.json({ message: "Single material", material });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.requestMaterial = async (req, res, next) => {
   // check if the book is available
   // check the count
