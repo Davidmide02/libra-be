@@ -40,7 +40,7 @@ router.post(
 
 router.post(
   "/login",
-  [
+  [ 
     body("email")
       .notEmpty()
       .withMessage("Add email")

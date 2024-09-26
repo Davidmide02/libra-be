@@ -37,5 +37,5 @@ mongoose
   .then(console.log("connected to databasee"), app.listen(8080||process.env.PORT))
   .catch((err) => {
     console.log("Cannot connect to database");
-    console.log(err.message);
+    // console.log(err.message);
   });

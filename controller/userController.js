@@ -5,6 +5,11 @@ const reviewDb = require("../model/review");
 exports.getAllMaterial = async (req, res, next) => {
   try {
     const allMaterials = await materialDb.find();
+    if (!allMaterials) {
+      const error = new Error("Can't fetch materials");
+      error.statusCode = 404;
+      return next(error);
+    }
     res.json({
       message: "materials fetched",
       allMaterials,
@@ -14,7 +19,7 @@ exports.getAllMaterial = async (req, res, next) => {
   }
 };
 
-exports.singleMaterial = async (req, res, next) => {
+exports.getSingleMaterial = async (req, res, next) => {
   const { materialId } = req.params;
 
   try {
@@ -32,14 +37,10 @@ exports.singleMaterial = async (req, res, next) => {
 };
 
 exports.requestMaterial = async (req, res, next) => {
-  // check if the book is available
-  // check the count
-  // "66b4da21c880083f7467974b"
+  
   const { materialId } = req.params;
   const userId = req.body.userId;
 
-  console.log("userId:", userId);
-  console.log("materialID:", materialId);
 
   try {
     const newRequest = new requestDb({
