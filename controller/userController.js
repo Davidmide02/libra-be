@@ -23,7 +23,17 @@ exports.getSingleMaterial = async (req, res, next) => {
   const { materialId } = req.params;
 
   try {
-    const material = await materialDb.findById(materialId);
+    const material = await materialDb.findById(materialId).populate([
+      {
+        path: "requests",
+        select: "users",
+      },
+      {
+        path: "reviews",
+        select: "user rating comment createdAt",
+        
+      },
+    ]);
 
     if (!material) {
       const error = new Error("material not found");
@@ -37,16 +47,15 @@ exports.getSingleMaterial = async (req, res, next) => {
 };
 
 exports.requestMaterial = async (req, res, next) => {
-  
   const { materialId } = req.params;
   const userId = req.body.userId;
-
 
   try {
     const newRequest = new requestDb({
       satus: "Pending",
     });
     newRequest.materials.push(materialId);
+
     newRequest.users.push(userId);
     await newRequest.save();
     const material = await materialDb.findById(materialId);
@@ -69,8 +78,6 @@ exports.requestMaterial = async (req, res, next) => {
 };
 
 exports.reviewMaterial = async (req, res, next) => {
-  // check if the book is available
-  // check the count
   const { materialId } = req.params;
   const userId = req.body.userId;
   const rating = req.body.rating;
@@ -101,6 +108,3 @@ exports.reviewMaterial = async (req, res, next) => {
     next(error);
   }
 };
-
-// Error: Can't set headers after they are sent to the client
-// request id "66ca386a583d34eda00f4acc"

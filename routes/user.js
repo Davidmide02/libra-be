@@ -1,12 +1,10 @@
 const express = require("express");
 const userController = require("../controller/userController");
 const router = express.Router();
-const userDb = require("../model/user");
-const { body } = require("express-validator");
 
 // user/material
 router.get("/material", userController.getAllMaterial);
-router.get('/material/:materialId',userController.getSingleMaterial)  
+router.get("/material/:materialId", userController.getSingleMaterial);
 router.post("/request/:materialId", userController.requestMaterial);
 router.post("/review/:materialId", userController.reviewMaterial);
 
