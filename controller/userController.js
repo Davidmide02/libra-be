@@ -80,7 +80,7 @@ exports.requestMaterial = async (req, res, next) => {
 exports.reviewMaterial = async (req, res, next) => {
   const { materialId } = req.params;
   const userId = req.body.userId;
-  const rating = req.body.rating;
+  const rating = req.body.rating||4;
   const comment = req.body.comment;
 
   try {
