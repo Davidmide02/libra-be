@@ -18,6 +18,7 @@ const userSchema = new Schema({
   //   for subscription
   status: {
     type: String,
+    default:"free",
     enum: ["free", "weekly", "monthly"],
   },
   role: {

@@ -15,12 +15,14 @@ exports.signup = async (req, res, next) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
+  const role = req.body.role || "user";
   try {
     const hashedPw = await bcrypt.hash(password, 12);
     const user = new userDb({
       email,
       password: hashedPw,
       username,
+      role,
     });
     await user.save();
     const token = jwt.sign(
@@ -70,7 +72,7 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign(
       { email: user.email, userId: user._id.toString() },
       "longsupersecret",
-      { expiresIn: "1h" }    
+      { expiresIn: "1h" }
     );
     return res.status(200).json({
       message: "Login successfully",
@@ -86,7 +88,6 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
-//  if a user as already request a material before now . it should flag it 
+//  if a user as already request a material before now . it should flag it
 //  get the userid of the request and check if it is  not present in the existing  users
 // if it is present it should return with the message you already request this material
