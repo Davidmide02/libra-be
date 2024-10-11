@@ -22,7 +22,7 @@ exports.signup = async (req, res, next) => {
       email,
       password: hashedPw,
       username,
-      role,
+      role, 
     });
     await user.save();
     const token = jwt.sign(

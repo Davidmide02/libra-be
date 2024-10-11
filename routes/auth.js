@@ -22,7 +22,7 @@ router.post(
           const userDoc = await userDb.findOne({ email: value });
           console.log("user first:", userDoc);
           if (userDoc) {
-            console.log(" console Email address already exists");
+            console.log("console Email address already exists");
             return Promise.reject("Email address already exists");
           }
         } catch (error) {

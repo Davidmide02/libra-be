@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const materialDb = require("../model/material");
 const { Error } = require("mongoose");
+const userDb = require("../model/user");
 
 exports.createMaterial = async (req, res, next) => {
   const result = validationResult(req);
@@ -97,5 +98,22 @@ exports.deleteMaterial = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await userDb.find().select("-password");
+    if (!users) {
+      const error = new Error("Can't fetch users, try again");
+      error.statusCode = 403;
+      return next(error);
+    }
+
+    res.json({ message: "All users fetched", users });
+  } catch (error) {
+    next(error)
+  }
+};
+
+
 // 66b4dd9560194678ddab5cdf
 // 66b4d9da6bdcf4ad85c8eb30

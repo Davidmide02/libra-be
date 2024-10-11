@@ -19,7 +19,7 @@ const materialSchema = new Schema(
       type: String,
       require: true,
     },
-    isavailabe: {
+    isavailable: {
       type: Boolean,
       require: true,
       default: true,

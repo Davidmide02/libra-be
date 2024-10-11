@@ -31,6 +31,7 @@ router.put(
   adminController.editMaterial
 );
 router.put("/delete/:id", adminController.deleteMaterial);
+router.get("/users",adminController.getAllUsers)
 
 module.exports = router;
 
