@@ -114,6 +114,8 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
+// approve requst 
+// decline request
 
 // 66b4dd9560194678ddab5cdf
 // 66b4d9da6bdcf4ad85c8eb30

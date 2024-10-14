@@ -5,7 +5,7 @@ const reviewDb = require("../model/review");
 exports.getAllMaterial = async (req, res, next) => {
   try {
     const allMaterials = await materialDb.find();
-    if (!allMaterials) {
+    if (!allMaterials) {  
       const error = new Error("Can't fetch materials");
       error.statusCode = 404;
       return next(error);
@@ -33,7 +33,7 @@ exports.getSingleMaterial = async (req, res, next) => {
         select: "user rating comment createdAt",
         
       },
-    ]);
+    ]);                       
 
     if (!material) {
       const error = new Error("material not found");
