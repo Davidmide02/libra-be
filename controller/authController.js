@@ -22,7 +22,7 @@ exports.signup = async (req, res, next) => {
       email,
       password: hashedPw,
       username,
-      role, 
+      role,
     });
     await user.save();
     const token = jwt.sign(
@@ -71,13 +71,14 @@ exports.login = async (req, res, next) => {
 
     const token = jwt.sign(
       { email: user.email, userId: user._id.toString() },
-      "longsupersecret",
+      `${jwt_secret}`,
       { expiresIn: "1h" }
     );
     return res.status(200).json({
       message: "Login successfully",
       email,
       userId: user._id.toString(),
+      role: user.role,
       token,
     });
   } catch (error) {
