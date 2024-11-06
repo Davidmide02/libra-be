@@ -2,6 +2,7 @@ const { body, validationResult } = require("express-validator");
 const materialDb = require("../model/material");
 const { Error } = require("mongoose");
 const userDb = require("../model/user");
+const user = require("../model/user");
 
 exports.createMaterial = async (req, res, next) => {
   const result = validationResult(req);
@@ -33,7 +34,38 @@ exports.createMaterial = async (req, res, next) => {
 
 exports.getAllMaterial = async (req, res, next) => {
   try {
-    const allMaterials = await materialDb.find();
+    const page = 1;
+    const limit = 5;
+    const allMaterials = await materialDb.aggregate([
+      // { $match: { role: "user" } },
+      // { $project: { password: 0 } },
+      { $sort: { createdAt: -1 } },
+      {
+        $facet: {
+          metaData: [
+            {
+              $count: "totalMaterials",
+            },
+            {
+              $addFields: {
+                pageNumber: page,
+                totalPages: { $ceil: { $divide: ["$totalMaterials", limit] } },
+              },
+            },
+          ],
+          data: [
+            {
+              $skip: (page - 1) * limit,
+            },
+            {
+              $limit: limit,
+            },
+          ],
+        },
+      },
+
+      { $addFields: { "metaData.itemsOnPage": { $size: "$data" } } },
+    ]);
     res.json({
       message: "materials fetched",
       allMaterials,
@@ -101,7 +133,39 @@ exports.deleteMaterial = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await userDb.find().select("-password");
+    const page = 1;
+    const limit = 5;
+    const users = await userDb.aggregate([
+      { $match: { role: "user" } },
+      { $project: { password: 0 } },
+      { $sort: { createdAt: -1 } },
+      {
+        $facet: {
+          metaData: [
+            {
+              $count: "totalUsers",
+            },
+            {
+              $addFields: {
+                pageNumber: page,
+                totalPages: { $ceil: { $divide: ["$totalUsers", limit] } },
+              },
+            },
+          ],
+          data: [
+            {
+              $skip: (page - 1) * limit,
+            },
+            {
+              $limit: limit,
+            },
+          ],
+        },
+      },
+
+      { $addFields: { "metaData.itemsOnPage": { $size: "$data" } } },
+    ]);
+    // .select("-password");
     if (!users) {
       const error = new Error("Can't fetch users, try again");
       error.statusCode = 403;
@@ -110,11 +174,11 @@ exports.getAllUsers = async (req, res, next) => {
 
     res.json({ message: "All users fetched", users });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-// approve requst 
+// approve requst
 // decline request
 
 // 66b4dd9560194678ddab5cdf
