@@ -34,8 +34,8 @@ exports.createMaterial = async (req, res, next) => {
 
 exports.getAllMaterial = async (req, res, next) => {
   try {
-    const page = 1;
-    const limit = 5;
+   
+    const { page = 1, limit = 5 } = req.query;
     const allMaterials = await materialDb.aggregate([
       // { $match: { role: "user" } },
       // { $project: { password: 0 } },
@@ -133,8 +133,9 @@ exports.deleteMaterial = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const page = 1;
-    const limit = 5;
+    const { page = 1, limit = 5 } = req.query;
+    // const page = 1;
+    // const limit = 5;
     const users = await userDb.aggregate([
       { $match: { role: "user" } },
       { $project: { password: 0 } },
