@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const handleValidationErrors = require("../middleware/validateMiddleware");
 
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");

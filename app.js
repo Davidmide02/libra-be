@@ -6,6 +6,8 @@ const app = express();
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
+const adminAuthMiddleware = require("./middleware/adminAuthmiddleware");
+const userAuthMiddleware = require("./middleware/userAuthMiddleware");
 const path = require("path");
 const db_username = process.env.DB_USERNAME;
 const db_password = process.env.DB_PASSWORD;
@@ -19,11 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/admin", adminRoutes);
-app.use("/user", userRoutes);
+app.use("/admin", adminAuthMiddleware, adminRoutes);
+app.use("/user", userAuthMiddleware, userRoutes);
 app.use("/auth", authRoutes);
-
-
 
 // error middleware
 app.use((error, req, res, next) => {
