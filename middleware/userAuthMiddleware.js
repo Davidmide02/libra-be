@@ -21,15 +21,14 @@ module.exports = async (req, res, next) => {
               .send("Token has expired, please log in again");
           }
           return res.status(401).send("Fail to authenticate");
-          // return reject(new Error("Failed to authenticate token"));
         }
         resolve(decoded);
       });
     });
 
-    // console.log("token:", decodedToken);
     req.userId = decodedToken.userId;
     next();
+    
   } catch (error) {
     error.statusCode = 500;
     throw error;
