@@ -5,27 +5,33 @@ const userDb = require("../model/user");
 const user = require("../model/user");
 
 exports.createMaterial = async (req, res, next) => {
-  const result = validationResult(req);
-
-  if (!result.isEmpty()) {
-    return res.json({ errors: result.array() });
-  }
   const title = req.body.title;
   const author = req.body.author;
   const category = req.body.category;
   const count = req.body.count;
 
+  if (!req.file) {
+    const error = new Error("No image found, Upload a image");
+    error.statusCode = 404;
+    return next(error);
+  }
+  const image = `/uploads/${req.file.filename}`;
+
   try {
-    const newMaterial = new materialDb({
-      title,
-      author,
-      category,
-      count,
-    });
-    await newMaterial.save();
+    // const newMaterial = new materialDb({
+    //   title,
+    //   author,
+    //   category,
+    //   count,
+    //   image,
+    // });
+    // await newMaterial.save();
     res.status(200).json({
       message: "Material added successfully",
-      newMaterial,
+      // newMaterial,
+      title,
+      image,
+      category,
     });
   } catch (error) {
     next(error);
@@ -34,11 +40,8 @@ exports.createMaterial = async (req, res, next) => {
 
 exports.getAllMaterial = async (req, res, next) => {
   try {
-   
     const { page = 1, limit = 5 } = req.query;
     const allMaterials = await materialDb.aggregate([
-      // { $match: { role: "user" } },
-      // { $project: { password: 0 } },
       { $sort: { createdAt: -1 } },
       {
         $facet: {
@@ -134,8 +137,6 @@ exports.deleteMaterial = async (req, res, next) => {
 exports.getAllUsers = async (req, res, next) => {
   try {
     const { page = 1, limit = 5 } = req.query;
-    // const page = 1;
-    // const limit = 5;
     const users = await userDb.aggregate([
       { $match: { role: "user" } },
       { $project: { password: 0 } },
