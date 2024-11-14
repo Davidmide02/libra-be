@@ -17,17 +17,17 @@ exports.createMaterial = async (req, res, next) => {
   const image = `/uploads/${req.file.filename}`;
 
   try {
-    // const newMaterial = new materialDb({
-    //   title,
-    //   author,
-    //   category,
-    //   count,
-    //   image,
-    // });
-    // await newMaterial.save();
+    const newMaterial = new materialDb({
+      title,
+      author,
+      category,
+      count,
+      image,
+    });
+    await newMaterial.save();
     res.status(200).json({
       message: "Material added successfully",
-      // newMaterial,
+      newMaterial,
       title,
       image,
       category,
