@@ -5,7 +5,7 @@ const reviewDb = require("../model/review");
 exports.getAllMaterial = async (req, res, next) => {
   try {
     const allMaterials = await materialDb.find();
-    if (!allMaterials) {  
+    if (!allMaterials) {
       const error = new Error("Can't fetch materials");
       error.statusCode = 404;
       return next(error);
@@ -31,9 +31,8 @@ exports.getSingleMaterial = async (req, res, next) => {
       {
         path: "reviews",
         select: "user rating comment createdAt",
-        
       },
-    ]);                       
+    ]);
 
     if (!material) {
       const error = new Error("material not found");
@@ -51,13 +50,6 @@ exports.requestMaterial = async (req, res, next) => {
   const userId = req.body.userId;
 
   try {
-    const newRequest = new requestDb({
-      satus: "Pending",
-    });
-    newRequest.materials.push(materialId);
-
-    newRequest.users.push(userId);
-    await newRequest.save();
     const material = await materialDb.findById(materialId);
 
     if (!material) {
@@ -65,14 +57,21 @@ exports.requestMaterial = async (req, res, next) => {
       error.statusCode = 404;
       return next(error);
     }
+    const newRequest = new requestDb({
+      satus: "Pending",
+    });
+    newRequest.materials.push(materialId);
 
+    newRequest.users.push(userId);
+    await newRequest.save();
+  
     material.requests.push(newRequest._id);
     await material.save();
     return res.json({
       message: "Material request successful",
       newRequest,
     });
-  } catch (error) {
+  } catch (error) {  
     next(error);
   }
 };
@@ -80,7 +79,7 @@ exports.requestMaterial = async (req, res, next) => {
 exports.reviewMaterial = async (req, res, next) => {
   const { materialId } = req.params;
   const userId = req.body.userId;
-  const rating = req.body.rating||4;
+  const rating = req.body.rating || 4;
   const comment = req.body.comment;
 
   try {

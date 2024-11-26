@@ -133,7 +133,7 @@ exports.deleteMaterial = async (req, res, next) => {
   }
 };
 
-exports.getAllUsers = async (req, res, next) => {
+exports.getAllUsers = async (req, res, next) =>   {
   try {
     const { page = 1, limit = 5 } = req.query;
     const users = await userDb.aggregate([
