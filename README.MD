@@ -27,3 +27,6 @@ Scenerio (!)
 ## Data analysis:
 - Identify popular books, authors, or genres.
 - Track library usage patterns.
+
+"email":"John@gmail.com",
+"password":"passwordshort"

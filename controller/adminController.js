@@ -19,15 +19,6 @@ exports.createMaterial = async (req, res, next) => {
   }`;
 
   try {
-    const numberofMaterial = materialDb.length();
-    if (numberofMaterial >= 10) {
-      
-      res.status(403).json({
-        message:
-          "Material can't be added, the numbers of materials has been exceeded ",
-       
-      });
-    }
     const newMaterial = new materialDb({
       title,
       author,
