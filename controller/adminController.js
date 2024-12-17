@@ -14,9 +14,20 @@ exports.createMaterial = async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
-  const image = `/uploads/${req.file.filename}`;
+  const image = `${req.protocol}://${req.get("host")}/uploads/${
+    req.file.filename
+  }`;
 
   try {
+    const numberofMaterial = materialDb.length();
+    if (numberofMaterial >= 10) {
+      
+      res.status(403).json({
+        message:
+          "Material can't be added, the numbers of materials has been exceeded ",
+       
+      });
+    }
     const newMaterial = new materialDb({
       title,
       author,
@@ -68,6 +79,12 @@ exports.getAllMaterial = async (req, res, next) => {
 
       { $addFields: { "metaData.itemsOnPage": { $size: "$data" } } },
     ]);
+    // image serve
+    // const materialsWithImageUrl = materials.map(material => ({
+    //   ...material.toObject(),
+    //   image: `${req.protocol}://${req.get('host')}${material.image}`, // Full URL for the image
+    // }));
+
     res.json({
       message: "materials fetched",
       allMaterials,
@@ -133,7 +150,7 @@ exports.deleteMaterial = async (req, res, next) => {
   }
 };
 
-exports.getAllUsers = async (req, res, next) =>   {
+exports.getAllUsers = async (req, res, next) => {
   try {
     const { page = 1, limit = 5 } = req.query;
     const users = await userDb.aggregate([

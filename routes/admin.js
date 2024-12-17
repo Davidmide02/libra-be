@@ -1,10 +1,11 @@
 const express = require("express");
 const adminController = require("../controller/adminController");
-const   router = express.Router();
-const { body, check } = require("express-validator");
+const router = express.Router();
+const { body } = require("express-validator");
 const multer = require("multer");
 const path = require("path");
 const handleValidationErrors = require("../middleware/validateMiddleware");
+const materialDb = require("../model/material");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -44,12 +45,22 @@ const parseRequestData = (req, res, next) => {
   next();
 };
 
+const uploadLimit = () => {
+  const numberofMaterial = materialDb.length();
+  if (numberofMaterial >= 10) {
+    res.status(403).json({
+      message:
+        "Material can't be added, the numbers of materials has been exceeded ",
+    });
+  }
+};
 // /admin/create
 router.post(
   "/create",
   parseRequestData,
   validateMaterial,
   handleValidationErrors,
+  uploadLimit,
   upload.single("file"),
   adminController.createMaterial
 );
@@ -84,5 +95,3 @@ module.exports = router;
 // check if the materials count is out already
 // if yes return not avaliable
 // else approved and decrease the count
-// MCxxoXAGCyATrXW3
-// mongodb+srv://davidmide07:<password>@lmscluster.37roy.mongodb.net/?retryWrites=true&w=majority&appName=lmsCluster
