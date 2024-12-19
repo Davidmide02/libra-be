@@ -29,10 +29,7 @@ exports.createMaterial = async (req, res, next) => {
     await newMaterial.save();
     res.status(200).json({
       message: "Material added successfully",
-      newMaterial,
-      title,
-      image,
-      category,
+      newMaterial
     });
   } catch (error) {
     next(error);
