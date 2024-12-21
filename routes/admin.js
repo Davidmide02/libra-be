@@ -44,9 +44,8 @@ const parseRequestData = (req, res, next) => {
 
   next();
 };
-
-const uploadLimit = () => {
-  const numberofMaterial = materialDb.countDocuments();
+const uploadLimit = async () => {
+  const numberofMaterial = await materialDb.countDocuments();
   if (numberofMaterial >= 10) {
     res.status(403).json({
       message:
